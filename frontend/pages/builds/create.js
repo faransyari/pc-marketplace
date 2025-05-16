@@ -1,5 +1,10 @@
 import { useState, useEffect } from 'react';
 import api from '@/lib/api';
+import { requireAuth } from '@/lib/auth'
+
+export async function getServerSideProps(context) {
+  return requireAuth(context)
+}
 
 export default function CreatePCBuild() {
   const [name, setName] = useState('');
