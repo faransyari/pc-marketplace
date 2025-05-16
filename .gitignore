@@ -1,0 +1,6 @@
+# Ignore Python & Node envs globally
+backend/venv/
+node_modules/
+.env
+*.pyc
+__pycache__/
