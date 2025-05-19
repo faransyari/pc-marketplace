@@ -30,6 +30,7 @@ export default function ProductDetail() {
         recipient: product.seller,  // assumed field
         content: content,
         sender: user.id,
+        sender_first_name: user.first_name,
       })
       setContent('')
       fetchData()
@@ -51,11 +52,8 @@ export default function ProductDetail() {
         <div className="h-60 overflow-y-auto border rounded p-3 mb-4 bg-white">
           {messages.map(msg => (
             <div key={msg.id} className={`mb-2 ${msg.sender === user?.id ? 'text-right' : 'text-left'}`}>
-              <div className={`text-sm ${msg.sender === user?.id ? 'text-blue-600' : 'text-gray-800'}`}>
-                {msg.sender === user?.id ? 'You' : product.seller}
-              </div>
               <div className={`inline-block px-3 py-1 rounded-lg ${msg.sender === user?.id ? 'bg-blue-500 text-white' : 'bg-gray-200'}`}>
-                {msg.content}
+                {msg.sender === user?.id ? 'You' : msg.sender_first_name}: {msg.content}
               </div>
               <div className="text-xs text-gray-500">{new Date(msg.timestamp).toLocaleString()}</div>
             </div>

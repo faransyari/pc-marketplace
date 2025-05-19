@@ -7,7 +7,7 @@ from .views import (
     PCBuildViewSet,
     PCBuildComponentViewSet,
     UserViewSet,
-    MessageViewSet
+    MessageViewSet,
 )
 
 router = DefaultRouter()
@@ -22,4 +22,5 @@ router.register(r'messages', MessageViewSet)
 
 urlpatterns = [
     path('', include(router.urls)),
+
 ]

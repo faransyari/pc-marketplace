@@ -1,5 +1,4 @@
-from rest_framework import viewsets, filters
-from rest_framework.permissions import IsAuthenticated
+from rest_framework import viewsets
 from django.contrib.auth.models import User
 from .models import Category, ComponentType, Product, PCBuild, PCBuildComponent, Message
 from .serializers import (
@@ -60,4 +59,3 @@ class MessageViewSet(viewsets.ModelViewSet):
 
     def perform_create(self, serializer):
         serializer.save(sender=self.request.user)
-
