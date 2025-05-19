@@ -1,13 +1,15 @@
-from rest_framework import viewsets
+from rest_framework import viewsets, filters
+from rest_framework.permissions import IsAuthenticated
 from django.contrib.auth.models import User
-from .models import Category, ComponentType, Product, PCBuild, PCBuildComponent
+from .models import Category, ComponentType, Product, PCBuild, PCBuildComponent, Message
 from .serializers import (
     CategorySerializer,
     ComponentTypeSerializer,
     ProductSerializer,
     PCBuildSerializer,
     PCBuildComponentSerializer,
-    UserSerializer
+    UserSerializer,
+    MessageSerializer
 )
 
 class UserViewSet(viewsets.ModelViewSet):
@@ -45,4 +47,17 @@ class PCBuildViewSet(viewsets.ModelViewSet):
 class PCBuildComponentViewSet(viewsets.ModelViewSet):
     queryset = PCBuildComponent.objects.all()
     serializer_class = PCBuildComponentSerializer
+
+class MessageViewSet(viewsets.ModelViewSet):
+    queryset = Message.objects.all()  # ✅ Required by router
+    serializer_class = MessageSerializer
+
+    def get_queryset(self):
+        product_id = self.request.query_params.get('product')
+        if product_id:
+            return Message.objects.filter(product_id=product_id)
+        return Message.objects.all()
+
+    def perform_create(self, serializer):
+        serializer.save(sender=self.request.user)
 

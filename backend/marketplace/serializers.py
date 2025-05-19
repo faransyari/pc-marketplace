@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Category, ComponentType, Product, PCBuild, PCBuildComponent
+from .models import Category, ComponentType, Product, PCBuild, PCBuildComponent, Message
 from django.contrib.auth.models import User
 
 class UserSerializer(serializers.ModelSerializer):
@@ -64,3 +64,8 @@ class PCBuildSerializer(serializers.ModelSerializer):
         fields = ['id', 'user', 'name', 'description', 'created_at', 'components']
         read_only_fields = ['user']
 
+class MessageSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Message
+        fields = ['id', 'sender', 'recipient', 'product', 'content', 'timestamp']
+        read_only_fields = ['sender', 'timestamp']
