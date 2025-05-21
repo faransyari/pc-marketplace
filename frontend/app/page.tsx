@@ -10,14 +10,22 @@ export default function Home() {
         className="relative p-2 text-center text-gray-400 bg-gray-100 overflow-hidden flex items-center justify-center"
         style={{ minHeight: 700, height: 700 }}
       >
-        <h1 className="absolute left-0 right-0 top-3/8 -translate-y-1/2 flex items-start justify-center font-bold text-gray-800 z-10 text-4xl sm:text-6xl md:text-7xl lg:text-8xl xl:text-9xl">
+        <h1 className="absolute left-0 right-0 top-3/8 -translate-y-1/2 flex items-start justify-center font-bold text-gray-800 z-10 text-5xl sm:text-6xl md:text-7xl lg:text-8xl xl:text-9xl">
           Everything PCs
         </h1>
+        {/* Desktop Image */}
         <img
           src="/images/home-pc.png"
           alt="Home PC"
-          className="mx-auto w-full max-w-xs sm:max-w-md md:max-w-2xl lg:max-w-4xl xl:max-w-5xl h-auto relative z-10 animate-bounce-slow"
+          className="hidden sm:block mx-auto max-w-5xl sm:max-w-5xl md:max-w-5xl lg:max-w-5xl xl:max-w-5xl h-auto relative z-10 animate-bounce-slow"
           style={{ transform: 'translateY(300px)' }}
+        />
+        {/* Mobile Image */}
+        <img
+          src="/images/home-pc.png"
+          alt="Home PC Mobile"
+          className="block sm:hidden mx-auto max-w-4xl h-auto relative z-10 animate-bounce-slow"
+          style={{ transform: 'translateY(500px)' }}
         />
         <style jsx>{`
           @keyframes bounce-slow {
