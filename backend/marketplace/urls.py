@@ -6,7 +6,8 @@ from .views import (
     ProductViewSet,
     PCBuildViewSet,
     PCBuildComponentViewSet,
-    UserViewSet
+    UserViewSet,
+    MessageViewSet,
 )
 
 router = DefaultRouter()
@@ -16,8 +17,10 @@ router.register(r'products', ProductViewSet)
 router.register(r'builds', PCBuildViewSet)
 router.register(r'build-components', PCBuildComponentViewSet)
 router.register(r'users', UserViewSet)
+router.register(r'messages', MessageViewSet)
 
 
 urlpatterns = [
     path('', include(router.urls)),
+
 ]

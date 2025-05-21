@@ -11,7 +11,6 @@ export default function SellProduct() {
   const [componentType, setComponentType] = useState('')
   const [specs, setSpecs] = useState('')
   const [location, setLocation] = useState('')
-  const [seller, setSeller] = useState(1) // hardcoded for now
 
   const [categories, setCategories] = useState([])
   const [componentTypes, setComponentTypes] = useState([])

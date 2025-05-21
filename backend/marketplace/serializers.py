@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Category, ComponentType, Product, PCBuild, PCBuildComponent
+from .models import Category, ComponentType, Product, PCBuild, PCBuildComponent, Message
 from django.contrib.auth.models import User
 
 class UserSerializer(serializers.ModelSerializer):
@@ -7,12 +7,14 @@ class UserSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = User
-        fields = ['id', 'username', 'email', 'password']
+        fields = ['id', 'username', 'email', 'first_name', 'last_name', 'password']
 
     def create(self, validated_data):
         user = User(
             username=validated_data['username'],
-            email=validated_data.get('email', '')
+            email=validated_data.get('email', ''),
+            first_name=validated_data.get('first_name', ''),
+            last_name=validated_data.get('last_name', '')
         )
         user.set_password(validated_data['password'])
         user.save()
@@ -64,3 +66,9 @@ class PCBuildSerializer(serializers.ModelSerializer):
         fields = ['id', 'user', 'name', 'description', 'created_at', 'components']
         read_only_fields = ['user']
 
+class MessageSerializer(serializers.ModelSerializer):
+    sender_first_name = serializers.CharField(source='sender.first_name', read_only=True)
+    class Meta:
+        model = Message
+        fields = ['id', 'sender', 'recipient', 'product', 'content', 'timestamp', 'sender_first_name']
+        read_only_fields = ['sender', 'timestamp']
