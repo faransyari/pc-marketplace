@@ -77,7 +77,7 @@ function ProductGrid({ products }: { products: any[] }) {
                             {product.description}
                         </p>
                         <div className="flex items-center justify-between mt-auto">
-                            <p className="text-green-600 font-medium">${product.price}</p>
+                            <p className="text-gray-600 font-medium">${product.price}</p>
                             <button
                                 className="px-4 py-2 text-sm bg-blue-600 text-white rounded-3xl hover:bg-blue-700 transition duration-200 cursor-pointer"
                                 onClick={e => {
@@ -101,7 +101,7 @@ function ProductGrid({ products }: { products: any[] }) {
                         className="absolute left-2 top-1/2 transform -translate-y-1/2 z-10 bg-gray-400 text-white hover:bg-gray-300 p-3 rounded-full shadow-lg opacity-25 hover:opacity-50 transition"
                         aria-label="Scroll left"
                     >
-                        <svg className="w-5 h-5" fill="none" stroke="black" strokeWidth="2" viewBox="0 0 24 24">
+                        <svg className="w-5 h-5" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
                             <path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" />
                         </svg>
                     </button>
@@ -114,7 +114,7 @@ function ProductGrid({ products }: { products: any[] }) {
                     <div className="pointer-events-none absolute right-0 top-0 h-full w-12 bg-gradient-to-l from-white via-white/80 to-transparent z-10" />
                     <button
                         onClick={() => scroll('right')}
-                        className="absolute right-2 top-1/2 transform -translate-y-1/2 z-10 bg-gray-800 text-white hover:bg-gray-700 p-3 rounded-full shadow-lg opacity-25 hover:opacity-50 transition"
+                        className="absolute right-2 top-1/2 transform -translate-y-1/2 z-10 bg-gray-400 text-white hover:bg-gray-300 p-3 rounded-full shadow-lg opacity-25 hover:opacity-50 transition"
                         aria-label="Scroll right"
                     >
                         <svg className="w-5 h-5" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
