@@ -15,7 +15,7 @@ export default function Navbar() {
     const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
     return (
         <>
-            <nav className="bg-white sticky top-0 z-50 opacity-75 backdrop-blur-md">
+            <nav className="bg-white sticky top-0 z-50 opacity-98 backdrop-blur-lg">
                 <div className="max-w-4xl mx-auto px-4 flex items-center justify-between relative h-14">
                     {/* Logo */}
                     <Link href="/" className="text-xs font-bold text-gray-600 whitespace-nowrap">
