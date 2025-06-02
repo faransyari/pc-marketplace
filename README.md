@@ -18,7 +18,7 @@ This project supports:
 | Frontend | [Next.js](https://nextjs.org/)                                  |
 | Backend  | [Django REST Framework](https://www.django-rest-framework.org/) |
 | Auth     | Django User (JWT planned)                                       |
-| Styling  | Tailwind CSS (optional)                                         |
+| Styling  | Tailwind CSS                                                    |
 | API Comm | Axios                                                           |
 
 ---
