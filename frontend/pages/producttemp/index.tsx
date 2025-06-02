@@ -1,11 +1,19 @@
 import { useEffect, useState } from 'react';
 import api from '@/lib/api';
 
+interface Product {
+  id: number;
+  title: string;
+  description: string;
+  price: number;
+  condition: string;
+}
+
 export default function ProductList() {
-  const [products, setProducts] = useState([]);
+  const [products, setProducts] = useState<Product[]>([]);
 
   useEffect(() => {
-    api.get('products/')
+    api.get<Product[]>('products/')
       .then(res => setProducts(res.data))
       .catch(err => console.error(err));
   }, []);

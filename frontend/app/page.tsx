@@ -54,13 +54,13 @@ export default function Home() {
           </h2>
           <div>
             <button
-              className="mt-4 px-6 py-2 bg-blue-600 border-2 border-blue-600 text-white rounded-3xl hover:bg-blue-700 transition duration-300 cursor-pointer"
+              className="mt-4 px-6 py-2 bg-purple-600 border-2 border-purple-600 text-white rounded-3xl hover:bg-purple-700 transition duration-300 cursor-pointer"
               onClick={() => window.location.assign('/product')}
             >
               Shop Now
             </button>
             <button
-              className="ml-4 mt-4 px-6 py-2 bg-white border-2 border-blue-600 text-blue-600 rounded-3xl hover:bg-blue-50 transition duration-300 cursor-pointer"
+              className="ml-4 mt-4 px-6 py-2 bg-white border-2 border-purple-600 text-purple-600 rounded-3xl transition duration-300 cursor-pointer hover:bg-purple-600 hover:text-white"
               onClick={() => window.location.assign('/builds')}
             >
               Build Your Own
