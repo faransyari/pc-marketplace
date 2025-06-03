@@ -11,7 +11,8 @@ import api from '@/lib/api';
 import Navbar from '@/components/Navbar';
 
 interface ProductPageProps {
-  params: { id: string };
+  params: Promise<{ id: string }>;
+
 }
 
 const CATEGORIES = [
@@ -42,7 +43,7 @@ const CATEGORIES = [
 ];
 
 export default async function ProductPage({ params }: ProductPageProps) {
-  const { id } = params;
+  const { id } = await params;
 
   let product;
   try {
