@@ -50,7 +50,7 @@ export default function Navbar() {
                         <Link href="/cart"><FaShoppingCart /></Link>
                         <Link href="/notifications"><FaBell /></Link>
                         <Link href="/messages"><FaEnvelope /></Link>
-                        <Link href="/dashboard"><FaUserCircle /></Link>
+                        <Link href="/profile"><FaUserCircle /></Link>
                         {/* Hamburger for mobile */}
                         <button
                             className="md:hidden ml-2"
