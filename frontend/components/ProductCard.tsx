@@ -1,7 +1,7 @@
 'use client'
 import Link from 'next/link'
 import { LuCpu } from 'react-icons/lu'
-import { resolveImage } from '@/lib/config'
+import { resolveImage, formatPrice } from '@/lib/config'
 
 export type Product = {
   id: number
@@ -61,7 +61,7 @@ export default function ProductCard({ product }: { product: Product }) {
           </div>
         )}
         <div className="mt-auto flex items-center justify-between">
-          <span className="mono font-semibold text-ink">${Number(product.price).toLocaleString()}</span>
+          <span className="mono font-semibold text-ink">{formatPrice(product.price)}</span>
           {product.slot_key && <span className="chip">Buildable</span>}
         </div>
       </div>

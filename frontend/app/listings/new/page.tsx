@@ -71,7 +71,7 @@ export default function NewListingPage() {
         <Field label="Title"><input className="field" value={form.title} onChange={e => set('title', e.target.value)} placeholder="e.g. RTX 3070 Founders Edition" /></Field>
         <div className="grid sm:grid-cols-2 gap-4">
           <Field label="Brand"><input className="field" value={form.brand} onChange={e => set('brand', e.target.value)} /></Field>
-          <Field label="Price (USD)"><input className="field mono" value={form.price} onChange={e => set('price', e.target.value)} placeholder="0.00" /></Field>
+          <Field label="Price (Rp)"><input className="field mono" value={form.price} onChange={e => set('price', e.target.value)} placeholder="0" /></Field>
         </div>
         <Field label="Description"><textarea className="field" rows={3} value={form.description} onChange={e => set('description', e.target.value)} /></Field>
 

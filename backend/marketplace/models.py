@@ -61,7 +61,7 @@ class Product(models.Model):
     slug = models.SlugField(max_length=280, unique=True, blank=True)
     brand = models.CharField(max_length=120, blank=True)
     description = models.TextField(blank=True)
-    price = models.DecimalField(max_digits=10, decimal_places=2)
+    price = models.DecimalField(max_digits=14, decimal_places=2)
     stock = models.PositiveIntegerField(default=0)
     is_active = models.BooleanField(default=True)
     condition = models.CharField(max_length=20, choices=CONDITION_CHOICES, default='new')

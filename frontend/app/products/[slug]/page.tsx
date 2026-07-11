@@ -4,7 +4,7 @@ import { useParams } from 'next/navigation'
 import Link from 'next/link'
 import { LuCpu, LuCheck } from 'react-icons/lu'
 import api from '@/lib/api'
-import { resolveImage } from '@/lib/config'
+import { resolveImage, formatPrice } from '@/lib/config'
 import { useAuth } from '@/lib/AuthContext'
 import { useBuild } from '@/lib/BuildContext'
 import { specChips, Product } from '@/components/ProductCard'
@@ -70,7 +70,7 @@ export default function ProductDetail() {
               : <span className="pill pill-warn">Community · {product.condition}</span>}
           </div>
           <h1 className="font-display text-3xl font-semibold text-ink mb-3">{product.title}</h1>
-          <div className="mono text-2xl font-semibold text-ink mb-4">${Number(product.price).toLocaleString()}</div>
+          <div className="mono text-2xl font-semibold text-ink mb-4">{formatPrice(product.price)}</div>
 
           {chips.length > 0 && (
             <div className="flex flex-wrap gap-1.5 mb-5">

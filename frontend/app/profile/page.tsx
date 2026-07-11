@@ -5,6 +5,7 @@ import Link from 'next/link'
 import api from '@/lib/api'
 import { useAuth } from '@/lib/AuthContext'
 import ProductCard, { Product } from '@/components/ProductCard'
+import { formatPrice } from '@/lib/config'
 import { Spinner, EmptyState } from '@/components/States'
 
 type Build = { id: number; name: string; total_price: number; items: any[]; created_at: string }
@@ -71,7 +72,7 @@ export default function ProfilePage() {
                     <div className="font-medium text-ink">{b.name}</div>
                     <div className="text-sm text-muted mono">{b.items.length} parts</div>
                   </div>
-                  <span className="mono font-semibold">${Number(b.total_price).toLocaleString()}</span>
+                  <span className="mono font-semibold">{formatPrice(b.total_price)}</span>
                 </Link>
               ))}
             </div>

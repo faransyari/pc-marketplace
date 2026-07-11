@@ -1,13 +1,12 @@
 'use client'
 import { useEffect, useState } from 'react'
-import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { LuCpu, LuCheck, LuTriangleAlert, LuX, LuPlus } from 'react-icons/lu'
 import api from '@/lib/api'
 import { useBuild, SLOTS } from '@/lib/BuildContext'
 import { useAuth } from '@/lib/AuthContext'
 import { specChips, Product } from '@/components/ProductCard'
-import { resolveImage } from '@/lib/config'
+import { resolveImage, formatPrice } from '@/lib/config'
 import { Spinner, EmptyState } from '@/components/States'
 
 export default function BuilderPage() {
@@ -73,7 +72,7 @@ export default function BuilderPage() {
                 </div>
                 {chosen ? (
                   <>
-                    <span className="mono text-sm font-semibold">${Number(chosen.price).toLocaleString()}</span>
+                    <span className="mono text-sm font-semibold">{formatPrice(chosen.price)}</span>
                     <button onClick={() => clearSlot(key)} className="text-gray-400 hover:text-danger" aria-label={`Remove ${label}`}><LuX /></button>
                   </>
                 ) : (
@@ -121,7 +120,7 @@ export default function BuilderPage() {
 
           <div className="flex justify-between items-baseline mt-4 pt-4 border-t border-line">
             <span className="text-sm text-muted">Total</span>
-            <span className="mono text-2xl font-semibold text-ink">${total.toLocaleString()}</span>
+            <span className="mono text-2xl font-semibold text-ink">{formatPrice(total)}</span>
           </div>
 
           <div className="mt-4 space-y-2">
@@ -186,7 +185,7 @@ function SlotPicker({ slot, onClose, onPick }: { slot: { key: string; label: str
                       <div className="text-sm font-medium text-ink truncate">{p.title}</div>
                       <div className="flex gap-1 mt-0.5">{specChips(p).slice(0, 3).map((c: string) => <span key={c} className="chip">{c}</span>)}</div>
                     </div>
-                    <span className="mono text-sm font-semibold">${Number(p.price).toLocaleString()}</span>
+                    <span className="mono text-sm font-semibold">{formatPrice(p.price)}</span>
                   </button>
                 )
               })}
