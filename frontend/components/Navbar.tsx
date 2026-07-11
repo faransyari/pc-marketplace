@@ -39,7 +39,7 @@ export default function Navbar() {
             onMouseEnter={() => setShopOpen(true)}
             onMouseLeave={() => setShopOpen(false)}
           >
-            <Link href="/products" className="px-3 py-2 text-gray-700 hover:text-violet font-medium">
+            <Link href="/products" className="nav-link px-3 py-2 font-medium inline-block">
               Shop
             </Link>
             {shopOpen && categories.length > 0 && (
@@ -56,34 +56,34 @@ export default function Navbar() {
               </div>
             )}
           </div>
-          <Link href="/builder" className="px-3 py-2 text-gray-700 hover:text-violet font-medium">
+          <Link href="/builder" className="nav-link px-3 py-2 font-medium inline-block">
             PC Builder
           </Link>
-          <Link href="/listings/new" className="px-3 py-2 text-gray-700 hover:text-violet font-medium">
+          <Link href="/listings/new" className="nav-link px-3 py-2 font-medium inline-block">
             Sell
           </Link>
         </div>
 
-        <form onSubmit={submitSearch} className="hidden lg:flex items-center flex-1 max-w-xs ml-auto relative">
-          <FaSearch className="absolute left-3 text-gray-400 text-sm" />
+        <form onSubmit={submitSearch} className="hidden lg:block flex-1 max-w-xs ml-auto relative">
+          <FaSearch className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 text-sm" />
           <input
             value={term}
             onChange={e => setTerm(e.target.value)}
             placeholder="Search parts"
-            className="field pl-9 py-2 text-sm"
+            className="field !pl-10 !py-2 text-sm"
           />
         </form>
 
         <div className="flex items-center gap-3 text-gray-700 ml-auto lg:ml-3">
-          <Link href="/builder" className="relative flex items-center" aria-label="Current build">
+          <Link href="/builder" className="relative flex items-center transition-colors hover:text-violet" aria-label="Current build">
             <LuCpu className="text-xl" />
             {count > 0 && (
-              <span className="absolute -top-2 -right-2 bg-violet text-white text-[10px] mono rounded-full w-4 h-4 flex items-center justify-center">
+              <span className="absolute -top-2 -right-2 bg-violet text-white text-[10px] mono rounded-full w-4 h-4 flex items-center justify-center animate-fade-in">
                 {count}
               </span>
             )}
           </Link>
-          <Link href="/messages" aria-label="Messages"><FaEnvelope className="text-lg" /></Link>
+          <Link href="/messages" aria-label="Messages" className="transition-colors hover:text-violet"><FaEnvelope className="text-lg" /></Link>
           {isAuthenticated ? (
             <Link href="/profile" className="flex items-center gap-1.5" aria-label="Profile">
               <FaUserCircle className="text-xl text-violet" />
@@ -100,13 +100,13 @@ export default function Navbar() {
 
       {mobileOpen && (
         <div className="md:hidden border-t border-line bg-white px-4 py-4 space-y-3">
-          <form onSubmit={submitSearch} className="relative flex items-center">
-            <FaSearch className="absolute left-3 text-gray-400 text-sm" />
+          <form onSubmit={submitSearch} className="relative block">
+            <FaSearch className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 text-sm" />
             <input
               value={term}
               onChange={e => setTerm(e.target.value)}
               placeholder="Search parts"
-              className="field pl-9 py-2 text-sm"
+              className="field !pl-10 !py-2 text-sm"
             />
           </form>
           <div className="flex justify-between items-center">

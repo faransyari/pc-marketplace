@@ -29,47 +29,49 @@ export default function Home() {
 
   return (
     <div>
-      <section className="max-w-6xl mx-auto px-4 pt-16 pb-20 grid lg:grid-cols-2 gap-12 items-center">
-        <div>
-          <div className="eyebrow mb-4">Marketplace · Builder · Compatibility</div>
-          <h1 className="font-display text-5xl md:text-6xl font-bold leading-[1.05] text-ink mb-5">
-            {settings.hero_title}
-          </h1>
-          <p className="text-lg text-muted mb-8 max-w-md">{settings.hero_subtitle}</p>
-          <div className="flex flex-wrap gap-3">
-            <Link href={settings.hero_cta_link || '/products'} className="btn btn-primary">
-              {settings.hero_cta_label || 'Shop Now'}
-            </Link>
-            <Link href="/builder" className="btn btn-ghost">
-              <LuCpu /> Build a PC
-            </Link>
+      <section className="hero-grid border-b border-line">
+        <div className="max-w-6xl mx-auto px-4 pt-20 pb-24 grid lg:grid-cols-2 gap-12 items-center">
+          <div>
+            <div className="eyebrow mb-4 animate-fade-up">Marketplace · Builder · Compatibility</div>
+            <h1 className="font-display text-5xl md:text-7xl font-bold leading-[1.02] text-ink mb-5 animate-fade-up delay-1">
+              {settings.hero_title}
+            </h1>
+            <p className="text-lg text-muted mb-8 max-w-md animate-fade-up delay-2">{settings.hero_subtitle}</p>
+            <div className="flex flex-wrap gap-3 animate-fade-up delay-3">
+              <Link href={settings.hero_cta_link || '/products'} className="btn btn-primary">
+                {settings.hero_cta_label || 'Shop Now'}
+              </Link>
+              <Link href="/builder" className="btn btn-ghost">
+                <LuCpu /> Build a PC
+              </Link>
+            </div>
           </div>
-        </div>
 
-        <div className="card p-6 shadow-sm">
-          <div className="flex items-center justify-between mb-4">
-            <span className="eyebrow">System check</span>
-            <span className="pill pill-ok"><LuCheck /> Compatible</span>
-          </div>
-          <div className="space-y-2.5">
-            {[
-              ['CPU', 'Ryzen 7 7800X3D', 'AM5'],
-              ['Motherboard', 'ROG STRIX B650-E', 'AM5'],
-              ['Memory', 'Vengeance 32GB', 'DDR5'],
-              ['Power Supply', 'RM750e', '750W'],
-            ].map(([slot, name, tag]) => (
-              <div key={slot} className="flex items-center justify-between border border-line rounded-lg px-3 py-2.5">
-                <div>
-                  <div className="eyebrow">{slot}</div>
-                  <div className="text-sm font-medium text-ink">{name}</div>
+          <div className="card p-6 shadow-[var(--shadow-lift)] animate-fade-up delay-2 lg:animate-float">
+            <div className="flex items-center justify-between mb-4">
+              <span className="eyebrow">System check</span>
+              <span className="pill pill-ok pulse-ok"><LuCheck /> Compatible</span>
+            </div>
+            <div className="space-y-2.5">
+              {[
+                ['CPU', 'Ryzen 7 7800X3D', 'AM5'],
+                ['Motherboard', 'ROG STRIX B650-E', 'AM5'],
+                ['Memory', 'Vengeance 32GB', 'DDR5'],
+                ['Power Supply', 'RM750e', '750W'],
+              ].map(([slot, name, tag]) => (
+                <div key={slot} className="flex items-center justify-between border border-line rounded-lg px-3 py-2.5 bg-white/70">
+                  <div>
+                    <div className="eyebrow">{slot}</div>
+                    <div className="text-sm font-medium text-ink">{name}</div>
+                  </div>
+                  <span className="chip">{tag}</span>
                 </div>
-                <span className="chip">{tag}</span>
-              </div>
-            ))}
-          </div>
-          <div className="flex items-center justify-between mt-4 pt-4 border-t border-line">
-            <span className="text-sm text-muted">Estimated draw</span>
-            <span className="mono text-sm">~620W</span>
+              ))}
+            </div>
+            <div className="flex items-center justify-between mt-4 pt-4 border-t border-line">
+              <span className="text-sm text-muted">Estimated draw</span>
+              <span className="mono text-sm">~620W</span>
+            </div>
           </div>
         </div>
       </section>
@@ -86,7 +88,7 @@ export default function Home() {
             </div>
             <div className="flex items-center justify-center">
               {resolveImage(s.image_src) ? (
-                <img src={resolveImage(s.image_src)!} alt={s.title} className="max-h-72 w-auto object-contain" />
+                <img src={resolveImage(s.image_src)!} alt={s.title} className="max-h-72 w-auto object-contain drop-shadow-xl animate-float" />
               ) : (
                 <div className="w-full aspect-video rounded-xl bg-white/50 border border-line flex items-center justify-center">
                   <LuCpu className="text-5xl text-gray-300" />
@@ -106,7 +108,11 @@ export default function Home() {
           <Link href="/products" className="text-sm text-violet hover:underline">View all</Link>
         </div>
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-          {featured.map(p => <ProductCard key={p.id} product={p} />)}
+          {featured.map((p, i) => (
+            <div key={p.id} className="animate-fade-up" style={{ animationDelay: `${i * 60}ms` }}>
+              <ProductCard product={p} />
+            </div>
+          ))}
         </div>
       </section>
     </div>

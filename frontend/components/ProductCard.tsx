@@ -37,12 +37,12 @@ export default function ProductCard({ product }: { product: Product }) {
   const chips = specChips(product)
 
   return (
-    <Link href={`/products/${product.slug}`} className="card overflow-hidden flex flex-col hover:shadow-md hover:border-violet/30 transition group">
+    <Link href={`/products/${product.slug}`} className="card card-hover overflow-hidden flex flex-col group">
       <div className="aspect-[4/3] bg-panel flex items-center justify-center overflow-hidden">
         {img ? (
-          <img src={img} alt={product.title} className="w-full h-full object-contain p-4 group-hover:scale-105 transition" />
+          <img src={img} alt={product.title} className="w-full h-full object-contain p-4 transition-transform duration-300 group-hover:scale-110" />
         ) : (
-          <LuCpu className="text-4xl text-gray-300" />
+          <LuCpu className="text-4xl text-gray-300 transition-transform duration-300 group-hover:scale-110" />
         )}
       </div>
       <div className="p-4 flex flex-col flex-1">
