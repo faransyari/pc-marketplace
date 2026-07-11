@@ -31,6 +31,7 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
+    'jazzmin',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -144,5 +145,52 @@ REST_FRAMEWORK = {
     ),
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
     'PAGE_SIZE': 12,
+}
+
+JAZZMIN_SETTINGS = {
+    'site_title': 'PC Marketplace Admin',
+    'site_header': 'PC Marketplace',
+    'site_brand': 'PC Marketplace',
+    'welcome_sign': 'Manage your storefront, builder catalog, and site content',
+    'copyright': 'PC Marketplace',
+    'search_model': ['marketplace.Product', 'auth.User'],
+    'order_with_respect_to': [
+        'marketplace.SiteSetting',
+        'marketplace.HomepageSection',
+        'marketplace.Category',
+        'marketplace.ComponentType',
+        'marketplace.Product',
+        'marketplace.PCBuild',
+        'marketplace.Message',
+        'auth',
+    ],
+    'icons': {
+        'auth': 'fas fa-users-cog',
+        'auth.user': 'fas fa-user',
+        'auth.Group': 'fas fa-users',
+        'marketplace.SiteSetting': 'fas fa-sliders-h',
+        'marketplace.HomepageSection': 'fas fa-window-maximize',
+        'marketplace.Category': 'fas fa-tags',
+        'marketplace.ComponentType': 'fas fa-microchip',
+        'marketplace.Product': 'fas fa-box',
+        'marketplace.PCBuild': 'fas fa-desktop',
+        'marketplace.Message': 'fas fa-envelope',
+    },
+    'default_icon_parents': 'fas fa-chevron-circle-right',
+    'default_icon_children': 'fas fa-circle',
+    'related_modal_active': True,
+}
+
+JAZZMIN_UI_TWEAKS = {
+    'theme': 'flatly',
+    'dark_mode_theme': 'darkly',
+    'accent': 'accent-purple',
+    'navbar': 'navbar-white navbar-light',
+    'sidebar': 'sidebar-dark-purple',
+    'brand_colour': 'navbar-purple',
+    'button_classes': {
+        'primary': 'btn-purple',
+        'success': 'btn-success',
+    },
 }
 
