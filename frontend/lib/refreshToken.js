@@ -1,11 +1,12 @@
 import axios from 'axios'
+import { API_URL } from './config'
 
 export async function refreshAccessToken() {
   const refresh = localStorage.getItem('refresh')
   if (!refresh) return null
 
   try {
-    const response = await axios.post('http://127.0.0.1:8000/api/token/refresh/', {
+    const response = await axios.post(`${API_URL}/token/refresh/`, {
       refresh: refresh,
     })
     const newAccess = response.data.access

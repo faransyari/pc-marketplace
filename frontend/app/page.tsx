@@ -1,94 +1,114 @@
 'use client'
-import Footer from '@/components/Footer'
-import Navbar from '@/components/Navbar'
+import { useEffect, useState } from 'react'
+import Link from 'next/link'
+import { LuCpu, LuCheck } from 'react-icons/lu'
+import api from '@/lib/api'
+import { useSite } from '@/lib/SiteContext'
+import { resolveImage } from '@/lib/config'
+import ProductCard, { Product } from '@/components/ProductCard'
+
+type Section = {
+  id: number
+  title: string
+  subtitle: string
+  image_src: string
+  button_label: string
+  button_link: string
+  background: string
+}
 
 export default function Home() {
+  const { settings } = useSite()
+  const [sections, setSections] = useState<Section[]>([])
+  const [featured, setFeatured] = useState<Product[]>([])
+
+  useEffect(() => {
+    api.get('homepage-sections/').then(r => setSections(r.data)).catch(() => {})
+    api.get('products/?seller_type=official&ordering=-created_at').then(r => setFeatured(r.data.results.slice(0, 8))).catch(() => {})
+  }, [])
+
   return (
-    <div className="min-h-screen bg-white">
-      <Navbar />
-      <div
-        className="relative p-2 text-center text-gray-400 bg-gray-100 overflow-hidden flex items-center justify-center"
-        style={{ minHeight: 700, height: 700 }}
-      >
-        <h1 className="absolute left-0 right-0 top-3/8 -translate-y-1/2 flex items-start justify-center font-bold text-gray-800 z-10 text-5xl sm:text-6xl md:text-7xl lg:text-8xl xl:text-9xl">
-          Everything PCs
-        </h1>
-        {/* Desktop Image */}
-        <img
-          src="/images/home-pc.png"
-          alt="Home PC"
-          className="hidden sm:block mx-auto max-w-5xl sm:max-w-5xl md:max-w-5xl lg:max-w-5xl xl:max-w-5xl h-auto relative z-10 animate-bounce-slow"
-          style={{ transform: 'translateY(300px)' }}
-        />
-        {/* Mobile Image */}
-        <img
-          src="/images/home-pc.png"
-          alt="Home PC Mobile"
-          className="block sm:hidden mx-auto max-w-4xl h-auto relative z-10 animate-bounce-slow"
-          style={{ transform: 'translateY(500px)' }}
-        />
-        <style jsx>{`
-          @keyframes bounce-slow {
-            0%, 100% {
-              transform: translateY(300px);
-            }
-            50% {
-              transform: translateY(294px);
-            }
-          }
-          .animate-bounce-slow {
-            animation: bounce-slow 4s ease-in-out infinite;
-          }
-        `}</style>
-      </div>
-      <div
-        className="relative p-2 mt-3 text-center text-gray-400 bg-gray-100 overflow-hidden flex items-center justify-center"
-        style={{ minHeight: 700, height: 1000 }}
-      >
-        <div className="absolute top-25 left-0 right-0 flex flex-col items-center justify-center z-10">
-          <h1 className="text-6xl font-bold text-gray-800">
-            Gaming Computers
+    <div>
+      <section className="max-w-6xl mx-auto px-4 pt-16 pb-20 grid lg:grid-cols-2 gap-12 items-center">
+        <div>
+          <div className="eyebrow mb-4">Marketplace · Builder · Compatibility</div>
+          <h1 className="font-display text-5xl md:text-6xl font-bold leading-[1.05] text-ink mb-5">
+            {settings.hero_title}
           </h1>
-          <h2 className="mt-2 text-2xl font-semibold text-gray-800">
-            Built for performance
-          </h2>
-          <div>
-            <button
-              className="mt-4 px-6 py-2 bg-purple-600 border-2 border-purple-600 text-white rounded-3xl hover:bg-purple-700 transition duration-300 cursor-pointer"
-              onClick={() => window.location.assign('/product')}
-            >
-              Shop Now
-            </button>
-            <button
-              className="ml-4 mt-4 px-6 py-2 bg-white border-2 border-purple-600 text-purple-600 rounded-3xl transition duration-300 cursor-pointer hover:bg-purple-600 hover:text-white"
-              onClick={() => window.location.assign('/builds')}
-            >
-              Build Your Own
-            </button>
+          <p className="text-lg text-muted mb-8 max-w-md">{settings.hero_subtitle}</p>
+          <div className="flex flex-wrap gap-3">
+            <Link href={settings.hero_cta_link || '/products'} className="btn btn-primary">
+              {settings.hero_cta_label || 'Shop Now'}
+            </Link>
+            <Link href="/builder" className="btn btn-ghost">
+              <LuCpu /> Build a PC
+            </Link>
           </div>
-          <img
-            src="/images/gaming-pc.png"
-            alt="Gaming PC"
-            className="w-full max-w-2xl h-auto relative z-10 mt-4"
-          />
         </div>
-        <div
-          className="relative p-2 text-center text-gray-400 bg-gray-100 overflow-hidden flex items-center justify-center"
-          style={{ minHeight: 700, height: 700 }}
-        >
+
+        <div className="card p-6 shadow-sm">
+          <div className="flex items-center justify-between mb-4">
+            <span className="eyebrow">System check</span>
+            <span className="pill pill-ok"><LuCheck /> Compatible</span>
+          </div>
+          <div className="space-y-2.5">
+            {[
+              ['CPU', 'Ryzen 7 7800X3D', 'AM5'],
+              ['Motherboard', 'ROG STRIX B650-E', 'AM5'],
+              ['Memory', 'Vengeance 32GB', 'DDR5'],
+              ['Power Supply', 'RM750e', '750W'],
+            ].map(([slot, name, tag]) => (
+              <div key={slot} className="flex items-center justify-between border border-line rounded-lg px-3 py-2.5">
+                <div>
+                  <div className="eyebrow">{slot}</div>
+                  <div className="text-sm font-medium text-ink">{name}</div>
+                </div>
+                <span className="chip">{tag}</span>
+              </div>
+            ))}
+          </div>
+          <div className="flex items-center justify-between mt-4 pt-4 border-t border-line">
+            <span className="text-sm text-muted">Estimated draw</span>
+            <span className="mono text-sm">~620W</span>
+          </div>
         </div>
-      </div>
-      <div
-        className="relative p-2 mt-3 text-center text-gray-400 overflow-hidden flex items-center justify-center"
-        style={{
-          minHeight: 700,
-          height: 1000,
-          background: 'linear-gradient(to bottom,rgb(230, 228, 255) 0%, #fff 100%)'
-        }}
-      >
-        
-      </div>
-      <Footer />
+      </section>
+
+      {sections.map((s, i) => (
+        <section key={s.id} style={{ background: s.background }} className="border-y border-line">
+          <div className={`max-w-6xl mx-auto px-4 py-16 grid md:grid-cols-2 gap-10 items-center ${i % 2 === 1 ? 'md:[&>*:first-child]:order-2' : ''}`}>
+            <div>
+              <h2 className="font-display text-3xl md:text-4xl font-semibold text-ink mb-3">{s.title}</h2>
+              <p className="text-muted mb-6 max-w-md">{s.subtitle}</p>
+              {s.button_label && (
+                <Link href={s.button_link || '/products'} className="btn btn-primary">{s.button_label}</Link>
+              )}
+            </div>
+            <div className="flex items-center justify-center">
+              {resolveImage(s.image_src) ? (
+                <img src={resolveImage(s.image_src)!} alt={s.title} className="max-h-72 w-auto object-contain" />
+              ) : (
+                <div className="w-full aspect-video rounded-xl bg-white/50 border border-line flex items-center justify-center">
+                  <LuCpu className="text-5xl text-gray-300" />
+                </div>
+              )}
+            </div>
+          </div>
+        </section>
+      ))}
+
+      <section className="max-w-6xl mx-auto px-4 py-16">
+        <div className="flex items-end justify-between mb-6">
+          <div>
+            <div className="eyebrow mb-1">From the store</div>
+            <h2 className="font-display text-2xl font-semibold text-ink">Featured parts</h2>
+          </div>
+          <Link href="/products" className="text-sm text-violet hover:underline">View all</Link>
+        </div>
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+          {featured.map(p => <ProductCard key={p.id} product={p} />)}
+        </div>
+      </section>
     </div>
   )
 }
