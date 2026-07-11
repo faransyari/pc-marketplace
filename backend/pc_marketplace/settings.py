@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 """
 
 from pathlib import Path
+from django.urls import reverse_lazy
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -31,7 +32,9 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
-    'jazzmin',
+    'unfold',
+    'unfold.contrib.filters',
+    'unfold.contrib.forms',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -147,50 +150,60 @@ REST_FRAMEWORK = {
     'PAGE_SIZE': 12,
 }
 
-JAZZMIN_SETTINGS = {
-    'site_title': 'PC Marketplace Admin',
-    'site_header': 'PC Marketplace',
-    'site_brand': 'PC Marketplace',
-    'welcome_sign': 'Manage your storefront, builder catalog, and site content',
-    'copyright': 'PC Marketplace',
-    'search_model': ['marketplace.Product', 'auth.User'],
-    'order_with_respect_to': [
-        'marketplace.SiteSetting',
-        'marketplace.HomepageSection',
-        'marketplace.Category',
-        'marketplace.ComponentType',
-        'marketplace.Product',
-        'marketplace.PCBuild',
-        'marketplace.Message',
-        'auth',
-    ],
-    'icons': {
-        'auth': 'fas fa-users-cog',
-        'auth.user': 'fas fa-user',
-        'auth.Group': 'fas fa-users',
-        'marketplace.SiteSetting': 'fas fa-sliders-h',
-        'marketplace.HomepageSection': 'fas fa-window-maximize',
-        'marketplace.Category': 'fas fa-tags',
-        'marketplace.ComponentType': 'fas fa-microchip',
-        'marketplace.Product': 'fas fa-box',
-        'marketplace.PCBuild': 'fas fa-desktop',
-        'marketplace.Message': 'fas fa-envelope',
+UNFOLD = {
+    'SITE_TITLE': 'PC Marketplace Admin',
+    'SITE_HEADER': 'PC Marketplace',
+    'SITE_SUBHEADER': 'Storefront, builder catalog & site content',
+    'SITE_SYMBOL': 'memory',
+    'SHOW_HISTORY': True,
+    'SHOW_VIEW_ON_SITE': True,
+    'COLORS': {
+        'primary': {
+            '50': '245 243 255',
+            '100': '237 233 254',
+            '200': '221 214 254',
+            '300': '196 181 253',
+            '400': '167 139 250',
+            '500': '124 58 237',
+            '600': '109 40 217',
+            '700': '91 33 182',
+            '800': '76 29 149',
+            '900': '59 7 100',
+            '950': '46 16 101',
+        },
     },
-    'default_icon_parents': 'fas fa-chevron-circle-right',
-    'default_icon_children': 'fas fa-circle',
-    'related_modal_active': True,
-}
-
-JAZZMIN_UI_TWEAKS = {
-    'theme': 'flatly',
-    'dark_mode_theme': 'darkly',
-    'accent': 'accent-purple',
-    'navbar': 'navbar-white navbar-light',
-    'sidebar': 'sidebar-dark-purple',
-    'brand_colour': 'navbar-purple',
-    'button_classes': {
-        'primary': 'btn-purple',
-        'success': 'btn-success',
+    'SIDEBAR': {
+        'show_search': True,
+        'show_all_applications': True,
+        'navigation': [
+            {
+                'title': 'Content',
+                'separator': True,
+                'items': [
+                    {'title': 'Dashboard', 'icon': 'dashboard', 'link': reverse_lazy('admin:index')},
+                    {'title': 'Site settings', 'icon': 'tune', 'link': reverse_lazy('admin:marketplace_sitesetting_changelist')},
+                    {'title': 'Homepage sections', 'icon': 'web', 'link': reverse_lazy('admin:marketplace_homepagesection_changelist')},
+                ],
+            },
+            {
+                'title': 'Catalog',
+                'separator': True,
+                'items': [
+                    {'title': 'Products', 'icon': 'inventory_2', 'link': reverse_lazy('admin:marketplace_product_changelist')},
+                    {'title': 'Categories', 'icon': 'sell', 'link': reverse_lazy('admin:marketplace_category_changelist')},
+                    {'title': 'Component types', 'icon': 'memory', 'link': reverse_lazy('admin:marketplace_componenttype_changelist')},
+                ],
+            },
+            {
+                'title': 'Community',
+                'separator': True,
+                'items': [
+                    {'title': 'PC builds', 'icon': 'desktop_windows', 'link': reverse_lazy('admin:marketplace_pcbuild_changelist')},
+                    {'title': 'Messages', 'icon': 'mail', 'link': reverse_lazy('admin:marketplace_message_changelist')},
+                    {'title': 'Users', 'icon': 'person', 'link': reverse_lazy('admin:auth_user_changelist')},
+                ],
+            },
+        ],
     },
 }
 

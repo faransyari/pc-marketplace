@@ -58,6 +58,8 @@ pc-marketplace/
 
 #### Backend (Django)
 
+Requires Python 3.10+ (the admin uses [django-unfold](https://github.com/unfoldadmin/django-unfold)).
+
 ```bash
 cd backend
 python -m venv venv

@@ -1,4 +1,5 @@
 from django.contrib import admin
+from unfold.admin import ModelAdmin, TabularInline
 from .models import (
     Product,
     Category,
@@ -12,21 +13,21 @@ from .models import (
 
 
 @admin.register(Category)
-class CategoryAdmin(admin.ModelAdmin):
+class CategoryAdmin(ModelAdmin):
     list_display = ('name', 'slug')
     prepopulated_fields = {'slug': ('name',)}
     search_fields = ('name',)
 
 
 @admin.register(ComponentType)
-class ComponentTypeAdmin(admin.ModelAdmin):
+class ComponentTypeAdmin(ModelAdmin):
     list_display = ('name', 'slot_key')
     list_filter = ('slot_key',)
     search_fields = ('name',)
 
 
 @admin.register(Product)
-class ProductAdmin(admin.ModelAdmin):
+class ProductAdmin(ModelAdmin):
     list_display = ('title', 'brand', 'seller_type', 'category', 'component_type', 'price', 'stock', 'is_active')
     list_filter = ('seller_type', 'is_active', 'condition', 'category', 'component_type')
     list_editable = ('price', 'stock', 'is_active')
@@ -35,26 +36,26 @@ class ProductAdmin(admin.ModelAdmin):
     autocomplete_fields = ('category', 'component_type')
 
 
-class PCBuildComponentInline(admin.TabularInline):
+class PCBuildComponentInline(TabularInline):
     model = PCBuildComponent
     extra = 0
 
 
 @admin.register(PCBuild)
-class PCBuildAdmin(admin.ModelAdmin):
+class PCBuildAdmin(ModelAdmin):
     list_display = ('name', 'user', 'created_at')
     search_fields = ('name', 'user__username')
     inlines = [PCBuildComponentInline]
 
 
 @admin.register(Message)
-class MessageAdmin(admin.ModelAdmin):
+class MessageAdmin(ModelAdmin):
     list_display = ('sender', 'recipient', 'product', 'timestamp')
     search_fields = ('sender__username', 'recipient__username', 'content')
 
 
 @admin.register(SiteSetting)
-class SiteSettingAdmin(admin.ModelAdmin):
+class SiteSettingAdmin(ModelAdmin):
     list_display = ('logo_text', 'contact_email', 'primary_color')
 
     def has_add_permission(self, request):
@@ -65,7 +66,7 @@ class SiteSettingAdmin(admin.ModelAdmin):
 
 
 @admin.register(HomepageSection)
-class HomepageSectionAdmin(admin.ModelAdmin):
+class HomepageSectionAdmin(ModelAdmin):
     list_display = ('order', 'title', 'button_label', 'is_active')
     list_editable = ('title', 'button_label', 'is_active')
     list_filter = ('is_active',)
