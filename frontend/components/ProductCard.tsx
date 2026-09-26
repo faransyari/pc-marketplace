@@ -1,7 +1,7 @@
 'use client'
 import Link from 'next/link'
-import { LuCpu } from 'react-icons/lu'
 import { resolveImage, formatPrice } from '@/lib/config'
+import PartGlyph, { glyphFor } from './PartGlyph'
 
 export type Product = {
   id: number
@@ -21,48 +21,77 @@ export type Product = {
   form_factor?: string
   image_src?: string | null
   stock?: number
+  memory_slots?: number | null
+  max_memory_gb?: number | null
+  m2_slots?: number | null
+  sata_ports?: number | null
+  fan_headers?: number | null
+  memory_modules?: number | null
+  memory_capacity_gb?: number | null
+  storage_interface?: string
+  fan_mounts?: number | null
+  fan_size?: string
 }
 
 export function specChips(p: Product) {
   const chips: string[] = []
   if (p.socket) chips.push(p.socket)
+  if (p.memory_modules && p.memory_capacity_gb) {
+    chips.push(`${p.memory_modules}×${Math.round(p.memory_capacity_gb / p.memory_modules)}GB`)
+  }
   if (p.memory_type) chips.push(p.memory_type)
+  if (p.storage_interface) chips.push(p.storage_interface)
+  if (p.slot_key === 'fan' && p.fan_size) chips.push(`${p.fan_size}mm`)
   if (p.form_factor) chips.push(p.form_factor.split(',')[0])
   if (p.wattage) chips.push(`${p.wattage}W`)
   return chips
 }
 
-export default function ProductCard({ product }: { product: Product }) {
+export function ProductVisual({ product, className = '' }: { product: Product; className?: string }) {
   const img = resolveImage(product.image_src || null)
+  if (img) {
+    return <img src={img} alt={product.title} className={`w-full h-full object-contain mix-blend-multiply ${className}`} />
+  }
+  return <PartGlyph kind={glyphFor(product)} className={className} />
+}
+
+export default function ProductCard({ product }: { product: Product }) {
   const chips = specChips(product)
+  const used = !!product.condition && product.condition !== 'new'
+  const kind = product.component_type_name || product.category_name || 'Part'
 
   return (
-    <Link href={`/products/${product.slug}`} className="card card-hover overflow-hidden flex flex-col group">
-      <div className="aspect-[4/3] bg-panel flex items-center justify-center overflow-hidden">
-        {img ? (
-          <img src={img} alt={product.title} className="w-full h-full object-contain p-4 transition-transform duration-300 group-hover:scale-110" />
+    <Link
+      href={`/products/${product.slug}`}
+      className="group panel lift flex flex-col overflow-hidden min-w-0 h-full"
+    >
+      <div className="flex items-center justify-between gap-2 px-3 h-9 border-b-[1.5px] border-ink">
+        <span className="label !text-ink truncate">{kind}</span>
+        {used ? (
+          <span className="tag tag-accent">{product.condition}</span>
         ) : (
-          <LuCpu className="text-4xl text-gray-300 transition-transform duration-300 group-hover:scale-110" />
+          <span className="tag tag-plain">New</span>
         )}
       </div>
-      <div className="p-4 flex flex-col flex-1">
-        <div className="flex items-center justify-between mb-1">
-          <span className="eyebrow">{product.brand || product.component_type_name || product.category_name}</span>
-          {product.seller_type === 'official' ? (
-            <span className="pill pill-info">Store</span>
-          ) : (
-            <span className="pill pill-warn">Used</span>
-          )}
-        </div>
-        <h3 className="font-medium text-ink text-sm leading-snug line-clamp-2 mb-2">{product.title}</h3>
+
+      <div className="relative aspect-[4/3] bg-paper-2 flex items-center justify-center overflow-hidden">
+        <ProductVisual
+          product={product}
+          className="w-[42%] h-auto text-ink transition-transform duration-300 ease-[var(--ease-out)] group-hover:-rotate-6 group-hover:scale-110"
+        />
+      </div>
+
+      <div className="flex flex-col flex-1 p-3.5 border-t-[1.5px] border-ink">
+        {product.brand && <span className="text-xs text-ink-2 mb-0.5">{product.brand}</span>}
+        <h3 className="font-semibold text-sm leading-snug line-clamp-2 mb-2">{product.title}</h3>
         {chips.length > 0 && (
-          <div className="flex flex-wrap gap-1 mb-3">
-            {chips.slice(0, 3).map(c => <span key={c} className="chip">{c}</span>)}
-          </div>
+          <p className="mono text-[0.7rem] text-ink-2 mb-3 truncate">{chips.slice(0, 3).join(' · ')}</p>
         )}
-        <div className="mt-auto flex items-center justify-between">
-          <span className="mono font-semibold text-ink">{formatPrice(product.price)}</span>
-          {product.slot_key && <span className="chip">Buildable</span>}
+        <div className="mt-auto flex items-end justify-between gap-2 pt-2.5 border-t border-dashed border-rule">
+          <span className="num font-semibold text-[0.95rem] leading-none whitespace-nowrap">{formatPrice(product.price)}</span>
+          {product.slot_key && (
+            <span className="text-[0.7rem] text-ink-2 whitespace-nowrap hidden sm:inline">Fits the builder</span>
+          )}
         </div>
       </div>
     </Link>

@@ -3,6 +3,15 @@ import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 import { useAuth } from '@/lib/AuthContext'
+import AuthShell from '@/components/AuthShell'
+
+const FIELDS: { key: 'username' | 'first_name' | 'email' | 'password' | 'confirm'; label: string; type?: string; auto: string }[] = [
+  { key: 'username', label: 'Username', auto: 'username' },
+  { key: 'first_name', label: 'First name', auto: 'given-name' },
+  { key: 'email', label: 'Email', type: 'email', auto: 'email' },
+  { key: 'password', label: 'Password', type: 'password', auto: 'new-password' },
+  { key: 'confirm', label: 'Confirm password', type: 'password', auto: 'new-password' },
+]
 
 export default function RegisterPage() {
   const { register } = useAuth()
@@ -16,36 +25,46 @@ export default function RegisterPage() {
   const submit = async (e: React.FormEvent) => {
     e.preventDefault()
     setError('')
-    if (form.password.length < 8) return setError('Password must be at least 8 characters.')
-    if (form.password !== form.confirm) return setError('Passwords do not match.')
+    if (form.password.length < 8) return setError('Use at least 8 characters for your password.')
+    if (form.password !== form.confirm) return setError('The two passwords don’t match.')
     setBusy(true)
     try {
       await register({ username: form.username, email: form.email, first_name: form.first_name, password: form.password })
       router.push('/profile')
     } catch (err: any) {
       const data = err?.response?.data
-      setError(data ? Object.values(data).flat().join(' ') : 'Could not create account.')
+      setError(data ? Object.values(data).flat().join(' ') : 'Couldn’t create the account. Try again in a moment.')
     } finally {
       setBusy(false)
     }
   }
 
   return (
-    <div className="max-w-sm mx-auto px-4 py-20">
-      <div className="eyebrow mb-2">Join the marketplace</div>
-      <h1 className="font-display text-3xl font-semibold text-ink mb-6">Create account</h1>
-      <form onSubmit={submit} className="space-y-3">
-        <input className="field" placeholder="Username" value={form.username} onChange={e => update('username', e.target.value)} />
-        <input className="field" placeholder="First name" value={form.first_name} onChange={e => update('first_name', e.target.value)} />
-        <input className="field" type="email" placeholder="Email" value={form.email} onChange={e => update('email', e.target.value)} />
-        <input className="field" type="password" placeholder="Password" value={form.password} onChange={e => update('password', e.target.value)} />
-        <input className="field" type="password" placeholder="Confirm password" value={form.confirm} onChange={e => update('confirm', e.target.value)} />
-        {error && <p className="text-sm text-danger">{error}</p>}
-        <button className="btn btn-primary w-full" disabled={busy}>{busy ? 'Creating…' : 'Create account'}</button>
+    <AuthShell title="Create an account" aside="Save builds, sell parts, talk to sellers.">
+      <form onSubmit={submit} className="space-y-4">
+        <div className="grid sm:grid-cols-2 gap-4">
+          {FIELDS.slice(0, 2).map(f => (
+            <div key={f.key}>
+              <label htmlFor={f.key} className="field-label">{f.label}</label>
+              <input id={f.key} className="field" type={f.type || 'text'} autoComplete={f.auto} value={form[f.key]} onChange={e => update(f.key, e.target.value)} required={f.key === 'username'} />
+            </div>
+          ))}
+        </div>
+        {FIELDS.slice(2).map(f => (
+          <div key={f.key}>
+            <label htmlFor={f.key} className="field-label">{f.label}</label>
+            <input id={f.key} className="field" type={f.type || 'text'} autoComplete={f.auto} value={form[f.key]} onChange={e => update(f.key, e.target.value)} required />
+            {f.key === 'password' && <p className="text-xs text-ink-2 mt-1.5">At least 8 characters.</p>}
+          </div>
+        ))}
+        {error && <p className="notice-error" role="alert">{error}</p>}
+        <button className="btn btn-ink w-full" disabled={busy} data-state={busy ? 'loading' : undefined}>
+          {busy ? 'Creating your account…' : 'Create account'}
+        </button>
       </form>
-      <p className="text-sm text-muted mt-4">
-        Already have an account? <Link href="/login" className="text-violet hover:underline">Sign in</Link>
+      <p className="text-sm text-ink-2 mt-6">
+        Already have one? <Link href="/login" className="link">Sign in</Link>
       </p>
-    </div>
+    </AuthShell>
   )
 }

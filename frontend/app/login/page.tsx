@@ -3,6 +3,7 @@ import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 import { useAuth } from '@/lib/AuthContext'
+import AuthShell from '@/components/AuthShell'
 
 export default function LoginPage() {
   const { login } = useAuth()
@@ -20,25 +21,31 @@ export default function LoginPage() {
       await login(username, password)
       router.push('/profile')
     } catch {
-      setError('Wrong username or password.')
+      setError('That username and password don’t match. Check both and try again.')
     } finally {
       setBusy(false)
     }
   }
 
   return (
-    <div className="max-w-sm mx-auto px-4 py-20">
-      <div className="eyebrow mb-2">Welcome back</div>
-      <h1 className="font-display text-3xl font-semibold text-ink mb-6">Sign in</h1>
-      <form onSubmit={submit} className="space-y-3">
-        <input className="field" placeholder="Username" value={username} onChange={e => setUsername(e.target.value)} />
-        <input className="field" type="password" placeholder="Password" value={password} onChange={e => setPassword(e.target.value)} />
-        {error && <p className="text-sm text-danger">{error}</p>}
-        <button className="btn btn-primary w-full" disabled={busy}>{busy ? 'Signing in…' : 'Sign in'}</button>
+    <AuthShell title="Sign in" aside="Your builds are right where you left them.">
+      <form onSubmit={submit} className="space-y-4">
+        <div>
+          <label htmlFor="username" className="field-label">Username</label>
+          <input id="username" className="field" autoComplete="username" value={username} onChange={e => setUsername(e.target.value)} required />
+        </div>
+        <div>
+          <label htmlFor="password" className="field-label">Password</label>
+          <input id="password" className="field" type="password" autoComplete="current-password" value={password} onChange={e => setPassword(e.target.value)} required aria-invalid={!!error} />
+        </div>
+        {error && <p className="notice-error" role="alert">{error}</p>}
+        <button className="btn btn-ink w-full" disabled={busy} data-state={busy ? 'loading' : undefined}>
+          {busy ? 'Signing in…' : 'Sign in'}
+        </button>
       </form>
-      <p className="text-sm text-muted mt-4">
-        New here? <Link href="/register" className="text-violet hover:underline">Create an account</Link>
+      <p className="text-sm text-ink-2 mt-6">
+        New here? <Link href="/register" className="link">Create an account</Link>
       </p>
-    </div>
+    </AuthShell>
   )
 }
