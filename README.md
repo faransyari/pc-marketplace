@@ -5,7 +5,7 @@ A fullstack web application for buying, selling, and building PCs.
 This project supports:
 
 * 🏪 Official store inventory and 👤 community listings in one marketplace
-* 🧩 A slot-based PC builder with live compatibility checking (socket, memory, power)
+* 🧩 A slot-based PC builder with live compatibility checking (socket, memory, slots and ports, fans, power)
 * 🛠 Admin-driven content: homepage sections, site settings, categories, and products
 * 💬 Buyer/seller messaging and saveable builds per user
 * 🔐 JWT authentication
@@ -26,7 +26,7 @@ This project supports:
 ### 🚀 Features
 
 * **Dynamic storefront** — products, categories, and component slots served from the API with search, price, seller, and slot filters plus pagination.
-* **PC Builder** — one part per slot with a live system check that flags CPU/motherboard socket mismatches, memory-type conflicts, case fit, and power-supply headroom, then totals price and estimated wattage. Builds save to your profile.
+* **PC Builder** — nine slots (CPU, motherboard, memory, graphics, storage, PSU, case, cooler, case fans). Memory, storage and fans take multiple parts with quantities. The live system check flags socket mismatches, memory-type conflicts, sticks vs DIMM slots, total GB vs the board's limit, M.2 and SATA drives vs ports, fans vs case mounts and supported sizes, fan headers, case fit, one-per-build parts, and power-supply headroom, then totals price and estimated wattage. Builds save to your profile with quantities.
 * **Admin-editable content** — the homepage hero, promo sections, site settings, categories, component types, and the full product catalog are all managed from the Django admin. Nothing on the storefront is hardcoded.
 * **User listings** — post a part for sale, including optional compatibility data so it works in the builder.
 * **Messaging** — threaded conversations between buyers and sellers about a listing.
@@ -96,7 +96,7 @@ NEXT_PUBLIC_MEDIA_URL=http://127.0.0.1:8000
 | GET    | `/api/products/{slug}/`      | Product detail                       |
 | GET    | `/api/categories/`           | Categories                           |
 | GET    | `/api/components/`           | Component types (with builder slots) |
-| POST   | `/api/builds/validate/`      | Compatibility check for a part set   |
+| POST   | `/api/builds/validate/`      | Compatibility check. Body: `{"items": [{"product": id, "quantity": n}]}` |
 | GET/POST | `/api/builds/`             | Saved builds (auth)                  |
 | GET/POST | `/api/messages/`           | Messages (auth)                      |
 | GET    | `/api/site-settings/`        | Site settings singleton              |

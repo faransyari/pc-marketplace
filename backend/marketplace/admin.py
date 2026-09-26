@@ -34,6 +34,22 @@ class ProductAdmin(ModelAdmin):
     search_fields = ('title', 'brand', 'description')
     prepopulated_fields = {'slug': ('title',)}
     autocomplete_fields = ('category', 'component_type')
+    fieldsets = (
+        (None, {'fields': ('title', 'slug', 'brand', 'description', 'seller', 'seller_type', 'condition', 'is_active')}),
+        ('Price and stock', {'fields': ('price', 'stock', 'location')}),
+        ('Catalog', {'fields': ('category', 'component_type', 'image', 'image_url')}),
+        ('Compatibility', {'fields': ('socket', 'memory_type', 'form_factor', 'wattage', 'specs')}),
+        ('Capacity (for quantity checks)', {
+            'description': 'Fill in the ones that apply to this part type. Leave the rest blank.',
+            'fields': (
+                ('memory_slots', 'max_memory_gb'),
+                ('m2_slots', 'sata_ports', 'fan_headers'),
+                ('memory_modules', 'memory_capacity_gb'),
+                'storage_interface',
+                ('fan_mounts', 'fan_size'),
+            ),
+        }),
+    )
 
 
 class PCBuildComponentInline(TabularInline):

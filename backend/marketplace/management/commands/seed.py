@@ -19,6 +19,7 @@ COMPONENT_TYPES = [
     ('Storage', 'storage'),
     ('Case', 'case'),
     ('Cooler', 'cooler'),
+    ('Case Fan', 'fan'),
     ('Monitor', ''),
     ('Keyboard', ''),
     ('Mouse', ''),
@@ -45,6 +46,13 @@ PRODUCTS = [
     ('EVGA 500 BR 500W', 'EVGA', 'Power Supply', 'Components', 799000, 35, 500, '', '', '', 'official', 'new'),
     ('Samsung 990 Pro 2TB NVMe', 'Samsung', 'Storage', 'Components', 2799000, 30, 8, '', '', '', 'official', 'new'),
     ('WD Black SN770 1TB NVMe', 'Western Digital', 'Storage', 'Components', 1399000, 45, 7, '', '', '', 'official', 'new'),
+    ('Samsung 870 EVO 1TB SATA SSD', 'Samsung', 'Storage', 'Components', 1299000, 40, 4, '', '', '', 'official', 'new'),
+    ('Seagate BarraCuda 2TB HDD', 'Seagate', 'Storage', 'Components', 899000, 50, 6, '', '', '', 'official', 'new'),
+    ('Kingston Fury Beast 64GB DDR5', 'Kingston', 'Memory', 'Components', 3299000, 20, 12, '', 'DDR5', '', 'official', 'new'),
+    ('Arctic P12 PWM PST', 'Arctic', 'Case Fan', 'Components', 99000, 200, 2, '', '', '', 'official', 'new'),
+    ('Noctua NF-A12x25 PWM', 'Noctua', 'Case Fan', 'Components', 549000, 60, 2, '', '', '', 'official', 'new'),
+    ('Corsair AF140 Elite', 'Corsair', 'Case Fan', 'Components', 349000, 80, 2, '', '', '', 'official', 'new'),
+    ('NZXT F200 RGB Duo', 'NZXT', 'Case Fan', 'Components', 599000, 25, 4, '', '', '', 'official', 'new'),
     ('NZXT H7 Flow', 'NZXT', 'Case', 'Components', 2099000, 20, 0, '', '', 'ATX,Micro-ATX,Mini-ITX', 'official', 'new'),
     ('Fractal Design Meshify 2', 'Fractal', 'Case', 'Components', 2399000, 14, 0, '', '', 'ATX,Micro-ATX', 'official', 'new'),
     ('Noctua NH-D15', 'Noctua', 'Cooler', 'Components', 1799000, 25, 0, '', '', '', 'official', 'new'),
@@ -55,6 +63,27 @@ PRODUCTS = [
     ('HyperX Cloud II', 'HyperX', 'Headset', 'Peripherals', 1599000, 35, 0, '', '', '', 'official', 'new'),
     ('Prebuilt Gaming PC RTX 4070', 'PCM Custom', 'Graphics Card', 'Full PCs', 22999000, 10, 500, '', '', '', 'official', 'new'),
 ]
+
+# Capacity specs the builder uses for quantity checks. Applied on every seed run.
+SPECS = {
+    'ASUS ROG STRIX B650-E': dict(memory_slots=4, max_memory_gb=192, m2_slots=4, sata_ports=4, fan_headers=8),
+    'MSI PRO Z790-P': dict(memory_slots=4, max_memory_gb=192, m2_slots=4, sata_ports=6, fan_headers=8),
+    'Gigabyte B650M DS3H': dict(memory_slots=4, max_memory_gb=192, m2_slots=2, sata_ports=4, fan_headers=4),
+    'Corsair Vengeance 32GB DDR5': dict(memory_modules=2, memory_capacity_gb=32),
+    'G.Skill Trident Z5 16GB DDR5': dict(memory_modules=2, memory_capacity_gb=16),
+    'Corsair Vengeance 32GB DDR4': dict(memory_modules=2, memory_capacity_gb=32),
+    'Kingston Fury Beast 64GB DDR5': dict(memory_modules=2, memory_capacity_gb=64),
+    'Samsung 990 Pro 2TB NVMe': dict(storage_interface='M.2'),
+    'WD Black SN770 1TB NVMe': dict(storage_interface='M.2'),
+    'Samsung 870 EVO 1TB SATA SSD': dict(storage_interface='SATA'),
+    'Seagate BarraCuda 2TB HDD': dict(storage_interface='SATA'),
+    'NZXT H7 Flow': dict(fan_mounts=10, fan_size='120,140'),
+    'Fractal Design Meshify 2': dict(fan_mounts=9, fan_size='120,140'),
+    'Arctic P12 PWM PST': dict(fan_size='120'),
+    'Noctua NF-A12x25 PWM': dict(fan_size='120'),
+    'Corsair AF140 Elite': dict(fan_size='140'),
+    'NZXT F200 RGB Duo': dict(fan_size='200'),
+}
 
 USER_PRODUCTS = [
     ('Used RTX 3080 Founders', 'NVIDIA', 'Graphics Card', 'Components', 5499000, 1, 320, '', '', '', 'Jakarta', 'used'),
@@ -98,6 +127,9 @@ class Command(BaseCommand):
 
         self._seed_products(PRODUCTS, categories, types, store, 'official')
         self._seed_products(USER_PRODUCTS, categories, types, seller, 'user', location_col=True)
+
+        for title, specs in SPECS.items():
+            Product.objects.filter(title=title).update(**specs)
 
         SiteSetting.load()
 

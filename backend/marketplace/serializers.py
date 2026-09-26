@@ -60,6 +60,8 @@ class ProductSerializer(serializers.ModelSerializer):
             'description', 'price', 'stock', 'is_active', 'condition',
             'category', 'category_name', 'component_type', 'component_type_name', 'slot_key',
             'wattage', 'socket', 'memory_type', 'form_factor',
+            'memory_slots', 'max_memory_gb', 'm2_slots', 'sata_ports', 'fan_headers',
+            'memory_modules', 'memory_capacity_gb', 'storage_interface', 'fan_mounts', 'fan_size',
             'specs', 'image', 'image_url', 'image_src', 'location', 'created_at',
         ]
         read_only_fields = ['seller', 'slug', 'created_at']
@@ -76,7 +78,7 @@ class PCBuildComponentSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = PCBuildComponent
-        fields = ['id', 'build', 'product', 'product_detail', 'component_type']
+        fields = ['id', 'build', 'product', 'product_detail', 'component_type', 'quantity']
 
 
 class PCBuildSerializer(serializers.ModelSerializer):
@@ -89,7 +91,7 @@ class PCBuildSerializer(serializers.ModelSerializer):
         read_only_fields = ['user']
 
     def get_total_price(self, obj):
-        return sum(float(item.product.price) for item in obj.items.all())
+        return sum(float(item.product.price) * item.quantity for item in obj.items.all())
 
 
 class MessageSerializer(serializers.ModelSerializer):

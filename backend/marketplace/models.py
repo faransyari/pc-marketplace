@@ -30,7 +30,11 @@ class ComponentType(models.Model):
         ('storage', 'Storage'),
         ('case', 'Case'),
         ('cooler', 'Cooler'),
+        ('fan', 'Case Fan'),
     ]
+
+    # Slots a build can hold more than one of. Everything else is one per build.
+    MULTI_SLOTS = ('ram', 'storage', 'fan')
 
     name = models.CharField(max_length=100, unique=True)
     slot_key = models.CharField(max_length=20, choices=SLOT_CHOICES, blank=True)
@@ -72,6 +76,23 @@ class Product(models.Model):
     socket = models.CharField(max_length=60, blank=True)
     memory_type = models.CharField(max_length=30, blank=True)
     form_factor = models.CharField(max_length=40, blank=True)
+
+    # Capacity specs used by the builder to check quantities.
+    # Motherboard: how many of each it can take.
+    memory_slots = models.PositiveSmallIntegerField(null=True, blank=True, help_text='Motherboard: DIMM slots')
+    max_memory_gb = models.PositiveIntegerField(null=True, blank=True, help_text='Motherboard: max supported RAM in GB')
+    m2_slots = models.PositiveSmallIntegerField(null=True, blank=True, help_text='Motherboard: M.2 slots')
+    sata_ports = models.PositiveSmallIntegerField(null=True, blank=True, help_text='Motherboard: SATA ports')
+    fan_headers = models.PositiveSmallIntegerField(null=True, blank=True, help_text='Motherboard: fan headers')
+    # Memory kit: sticks in the kit and total kit capacity.
+    memory_modules = models.PositiveSmallIntegerField(null=True, blank=True, help_text='Memory: sticks per kit')
+    memory_capacity_gb = models.PositiveIntegerField(null=True, blank=True, help_text='Memory: total kit capacity in GB')
+    # Storage: M.2 or SATA.
+    STORAGE_INTERFACES = [('M.2', 'M.2'), ('SATA', 'SATA')]
+    storage_interface = models.CharField(max_length=10, choices=STORAGE_INTERFACES, blank=True, help_text='Storage: M.2 or SATA')
+    # Case: free fan mounts and supported fan sizes. Fan: its size.
+    fan_mounts = models.PositiveSmallIntegerField(null=True, blank=True, help_text='Case: fan mounting positions')
+    fan_size = models.CharField(max_length=40, blank=True, help_text='Fan: size in mm, e.g. 120. Case: supported sizes, e.g. 120,140')
 
     specs = models.TextField(blank=True, default='')
     image = models.ImageField(upload_to='product_images/', blank=True, null=True)
@@ -126,9 +147,10 @@ class PCBuildComponent(models.Model):
     build = models.ForeignKey(PCBuild, on_delete=models.CASCADE, related_name='items')
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
     component_type = models.ForeignKey(ComponentType, on_delete=models.SET_NULL, null=True)
+    quantity = models.PositiveSmallIntegerField(default=1)
 
     def __str__(self):
-        return f"{self.component_type} - {self.product.title} in {self.build.name}"
+        return f"{self.quantity}x {self.product.title} in {self.build.name}"
 
 
 class Message(models.Model):

@@ -124,9 +124,24 @@ class PCBuildViewSet(viewsets.ModelViewSet):
 
     @action(detail=False, methods=['post'], permission_classes=[permissions.AllowAny])
     def validate(self, request):
-        product_ids = request.data.get('products', [])
-        products = list(Product.objects.filter(id__in=product_ids).select_related('component_type'))
-        return Response(analyze(products))
+        # Accepts {"items": [{"product": id, "quantity": n}]} or the older
+        # {"products": [id, id, ...]} where a repeated id means another unit.
+        quantities = {}
+        for item in request.data.get('items', []) or []:
+            try:
+                pid, qty = int(item.get('product')), int(item.get('quantity', 1))
+            except (TypeError, ValueError, AttributeError):
+                continue
+            quantities[pid] = quantities.get(pid, 0) + max(qty, 0)
+        for pid in request.data.get('products', []) or []:
+            try:
+                pid = int(pid)
+            except (TypeError, ValueError):
+                continue
+            quantities[pid] = quantities.get(pid, 0) + 1
+
+        products = Product.objects.filter(id__in=quantities.keys()).select_related('component_type')
+        return Response(analyze([(p, min(quantities[p.id], 16)) for p in products]))
 
 
 class PCBuildComponentViewSet(viewsets.ModelViewSet):
